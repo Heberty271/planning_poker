@@ -1,7 +1,8 @@
+import Room from "./pages/Room";
 
 function App() {
   return (
-    <h1>Oi</h1>
+    <Room />
   );
 }
 
