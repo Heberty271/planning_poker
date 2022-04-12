@@ -1,8 +1,9 @@
 import Room from "./pages/Room";
+import { Template } from "./pages/Template";
 
 function App() {
   return (
-    <Room />
+    <Template />
   );
 }
 

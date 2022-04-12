@@ -24,7 +24,7 @@ export default function Room() {
   ]);
 
   useEffect(() => {    
-    database.ref('rooms').on('value', (_rooms) => {
+    database.ref('rooms').on('value', (_rooms:any) => {
       const firebaseRooms = _rooms.val();
 
 
