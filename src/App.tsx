@@ -1,8 +1,13 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Room from "./pages/Room";
 
 function App() {
   return (
-    <Room />
+    <BrowserRouter>
+      <Routes>
+        <Route path='/rooms' element={<Room />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
