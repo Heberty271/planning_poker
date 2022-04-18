@@ -35,12 +35,17 @@ h3 {
   font-weight: lighter;
 }
 
+.logo{
+  padding-left: 1rem;
+}
+
 input{
   margin: 0.5rem 1rem;
   padding: 10px 12px;
   font-size: 1.5rem;
   border-radius: 5px;
   border-color: #ccc;
+  border-style:groove;
   color: #444;
 }
 label{
@@ -80,7 +85,20 @@ button:hover{
 }
 
 .title-form{
-  background-color: royalblue;
-  border-radius: 20% 20% 0% 0%;
+  margin: 1rem;
   text-align: center;
+
+}
+
+.buttons-form{
+  text-align: center;
+}
+
+#form{
+  margin: 5rem;
+  padding-right: -2rem;
+}
+
+a{
+  margin: 1rem;
 }

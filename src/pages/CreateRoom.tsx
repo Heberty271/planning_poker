@@ -3,15 +3,17 @@ export function CreateRoom() {
     return (
         <>
             <nav>
-                <img></img>
-                <b>Logo</b>
-            </nav>
-            <br />
-            <main className="flex-center" style={{height:"100%"}}>
-                <div style={{width:"60%",height:"100%"}} className="flex-center">
-                        <img src="https://miro.medium.com/max/1400/1*UzlFgnkt2jCe9LbF7-DBTg.gif" width="600px"></img>
+                <div className="logo">
+                    <img></img>
+                    <h2>Criar Sala</h2>
                 </div>
-                <div style={{width:"40%",height:"100%"}} className="flex-center">
+                <div></div>
+            </nav>
+            <main className="flex-center" style={{height:"70%"}}>
+                <div style={{width:"60%",height:"100%"}} className="flex-center">
+                        <img src="https://miro.medium.com/max/1400/1*UzlFgnkt2jCe9LbF7-DBTg.gif" width="700px"></img>
+                </div>
+                <div id="form"style={{width:"40%",height:"100%"}} className="flex-center">
                     <div className="flex-down">
                         <form action="">
                             <div className="title-form">
@@ -25,10 +27,13 @@ export function CreateRoom() {
                             <br />
                             <input type="text" placeholder="Digite seu apelido" />
                             <br />
-                            <button className="btn-primary">Criar Sala</button>
-                            <br/>
+                            <div className="buttons-form">
+                                <button className="btn-primary">Criar Sala</button>
+                                <br/>
+                                <a href="">Acessar sala existente</a>
+                            </div>
                         </form>
-                        <a href="">Acessar sala existente</a>
+                        
                     </div>
                 </div>
             </main>
