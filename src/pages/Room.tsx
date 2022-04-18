@@ -40,26 +40,23 @@ export default function Room() {
       })
     });
 
-    return () => {}
-  })
 
-  async function criarSala(e:any) {
+  async function handleSubmit(e:any) {
     e.preventDefault();
     var data = new Date();
+    const createdAt = `${String(data.getDate()).padStart(2, '0')}-${String(data.getMonth() + 1).padStart(2, '0')}-${data.getFullYear()}`;
+
     const newRoom = {
       name: name,
-      createdAt: `${String(data.getDate()).padStart(2, '0')}-${String(data.getMonth() + 1).padStart(2, '0')}-${data.getFullYear()}`,
+      createdAt: createdAt
     }
-
-    database.ref('rooms').push(newRoom)
-    setName('')
     
   }
 
   return (
     <>
       <h1>Página de Salas</h1>
-      <form onSubmit={(e) => criarSala(e)}>
+      <form onSubmit={(e) => handleSubmit(e)}>
         <fieldset>
           <legend>Criar nova sala</legend>
           <label htmlFor="name">Digite o nome da sala</label>
