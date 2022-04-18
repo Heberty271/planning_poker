@@ -8,7 +8,37 @@ type Room = {
 
 export default function Room() {
   const [name, setName] = useState('');
-  const [rooms, setRooms] = useState<Room[]>([])
+  const [rooms, setRooms] = useState<Room[]>([
+    {
+      name: 'Room 1',
+      createdAt: 'hoje'
+    },
+    {
+      name: 'Room 2',
+      createdAt: 'hoje'
+    },
+    {
+      name: 'Room 3',
+      createdAt: 'hoje'
+    }
+  ]);
+
+  useEffect(() => {    
+    database.ref('rooms').on('value', (_rooms:any) => {
+      const firebaseRooms = _rooms.val();
+
+
+      Object.entries(firebaseRooms).map(([key, value]:any) => {
+        console.log(key, value);
+        const sala = {
+          name: value.name,
+          createdAt: value.createdAt
+        }
+
+        setRooms([...rooms, sala])        
+        
+      })
+    });
 
 
   async function handleSubmit(e:any) {
