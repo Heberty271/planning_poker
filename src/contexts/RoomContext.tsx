@@ -11,9 +11,15 @@ type RoomParams = {
   id: string
 }
 
+type NewRoomParams = {
+  name: string,
+
+}
+
 type RoomContextType = {
   name: string
   code: string
+  createRoom(params: NewRoomParams): any
   createTask(title: string): void
   deleteTask(taskId: string): void
 }
@@ -42,6 +48,17 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
     return () => { }
   }, [roomCode])
 
+
+  const createRoom = async (params: NewRoomParams) => {
+    const roomRef = database.ref('rooms');
+
+		const firebaseRoom = await roomRef.push({
+			name: params.name
+		});
+
+    return firebaseRoom
+  }
+
   const createTask = (title: string) => {
     database.ref(`rooms/${roomCode}/tasks`).push({
       title: title,
@@ -60,6 +77,7 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
     <RoomContext.Provider value={{
       name,
       code,
+      createRoom,
       createTask,
       deleteTask
     }

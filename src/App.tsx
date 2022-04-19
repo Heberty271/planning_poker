@@ -6,14 +6,17 @@ import { CreateRoom } from "./pages/CreateRoom";
 
 function App() {
   return (
-    <BrowserRouter>      
-        <Routes>
-          <Route path='/rooms' element={
-            <RoomContextProvider>
-              <Room />
-            </RoomContextProvider>
-          } />
-        </Routes>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/rooms' element={
+          <RoomContextProvider>
+            <Room />
+          </RoomContextProvider>
+        } />
+
+        <Route path='/rooms/new' element={<CreateRoom />} />
+        <Route path='/template' element={<Template />} />
+      </Routes>
     </BrowserRouter>
   );
 }
