@@ -13,10 +13,10 @@ function App() {
             <Room />
           </RoomContextProvider>
         } />
+
         <Route path='/rooms/new' element={<CreateRoom />} />
         <Route path='/template' element={<Template />} />
       </Routes>
-
     </BrowserRouter>
   );
 }
