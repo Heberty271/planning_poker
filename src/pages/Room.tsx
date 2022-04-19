@@ -23,25 +23,8 @@ export default function Room() {
     }
   ]);
 
-  useEffect(() => {    
-    database.ref('rooms').on('value', (_rooms:any) => {
-      const firebaseRooms = _rooms.val();
-
-
-      Object.entries(firebaseRooms).map(([key, value]:any) => {
-        console.log(key, value);
-        const sala = {
-          name: value.name,
-          createdAt: value.createdAt
-        }
-
-        setRooms([...rooms, sala])        
-        
-      })
-    });
-
-
   async function handleSubmit(e:any) {
+
     e.preventDefault();
     var data = new Date();
     const createdAt = `${String(data.getDate()).padStart(2, '0')}-${String(data.getMonth() + 1).padStart(2, '0')}-${data.getFullYear()}`;

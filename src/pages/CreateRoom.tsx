@@ -1,5 +1,27 @@
+import { FormEvent, useState } from "react"
+import { useRoom } from "../hooks/useRoom";
+
+type CreateRoom = {
+    name: string;
+    nick: string;
+  }
 
 export function CreateRoom() {
+    const [name, setName] = useState('');
+    const [nick, setNick] = useState('');
+
+    const { CreateRoom } = useRoom
+
+    const handleCreateRoom = (e: FormEvent) => {
+        e.preventDefault()
+
+        const params = {
+            name: name,
+            nick: nick
+        }
+        CreateRoom(params)
+    }
+
     return (
         <>
             <nav>
@@ -15,20 +37,20 @@ export function CreateRoom() {
                 </div>
                 <div id="form"style={{width:"40%",height:"100%"}} className="flex-center">
                     <div className="flex-down">
-                        <form action="">
+                        <form onSubmit={(e) => handleCreateRoom}>
                             <div className="title-form">
                                 <h2>Criar Nova Sala</h2>
                             </div>
-                            <label htmlFor="">Insira um nome para a Sala</label>
+                            <label htmlFor="name">Insira um nome para a Sala</label>
                             <br />
-                            <input type="text" placeholder="Digite o nome da sala" />
+                            <input onChange={(e) => {setName(e.target.value); }} type="text" id="name" value={name} placeholder="Digite o nome da sala" />
                             <br />
-                            <label htmlFor="">Insira um apelido</label>
+                            <label htmlFor="nick">Insira um apelido</label>
                             <br />
-                            <input type="text" placeholder="Digite seu apelido" />
+                            <input onChange={(e) => {setNick(e.target.value); }} type="text" id="nick" value={nick} placeholder="Digite seu apelido" />
                             <br />
                             <div className="buttons-form">
-                                <button className="btn-primary">Criar Sala</button>
+                                <button type="submit" className="btn-primary">Criar Sala</button>
                                 <br/>
                                 <a href="">Acessar sala existente</a>
                             </div>
