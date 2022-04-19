@@ -10,16 +10,16 @@ export function CreateRoom() {
     const [name, setName] = useState('');
     const [nick, setNick] = useState('');
 
-    const { CreateRoom } = useRoom
+    const { createRoom } = useRoom()
 
     const handleCreateRoom = (e: FormEvent) => {
         e.preventDefault()
 
         const params = {
-            name: name,
-            nick: nick
+            name: name
         }
-        CreateRoom(params)
+        console.log(params)
+        createRoom(params)
     }
 
     return (
@@ -37,7 +37,7 @@ export function CreateRoom() {
                 </div>
                 <div id="form"style={{width:"40%",height:"100%"}} className="flex-center">
                     <div className="flex-down">
-                        <form onSubmit={(e) => handleCreateRoom}>
+                        <form onSubmit={(e) => handleCreateRoom(e)}>
                             <div className="title-form">
                                 <h2>Criar Nova Sala</h2>
                             </div>
