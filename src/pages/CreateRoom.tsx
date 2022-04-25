@@ -1,4 +1,5 @@
 import { FormEvent, useState } from "react"
+import { useNavigate } from "react-router";
 import { useRoom } from "../hooks/useRoom";
 
 type CreateRoom = {
@@ -7,19 +8,23 @@ type CreateRoom = {
   }
 
 export function CreateRoom() {
+    const navigate = useNavigate();
     const [name, setName] = useState('');
     const [nick, setNick] = useState('');
 
     const { createRoom } = useRoom()
 
-    const handleCreateRoom = (e: FormEvent) => {
+    const handleCreateRoom = async (e: FormEvent) => {
         e.preventDefault()
 
         const params = {
-            name: name
+            name: name,
+            authorNick: nick
         }
-        console.log(params)
-        createRoom(params)
+        
+        const roomKey = await createRoom(params)
+
+        navigate(`/rooms/${roomKey}`)
     }
 
     return (

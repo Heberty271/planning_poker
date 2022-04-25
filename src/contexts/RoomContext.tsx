@@ -13,12 +13,13 @@ type RoomParams = {
 
 type NewRoomParams = {
   name: string,
+  authorNick: string
 
 }
 
 type RoomContextType = {
   name: string
-  code: string
+  roomCode: string
   createRoom(params: NewRoomParams): any
   createTask(title: string): void
   deleteTask(taskId: string): void
@@ -31,23 +32,22 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
   const roomCode = params.id ?? ''
 
   const [name, setName] = useState('')
-  const [code, setCode] = useState('')
+  // const [roomCode, setRoomCode] = useState('')
 
-  useEffect(() => {
-
+  useEffect(() => {    
+    
     const roomRef = database.ref(`rooms/${roomCode}`)
     roomRef.on('value', room => {
       const dataRoom = room.val()
 
       if (dataRoom) {
         setName(dataRoom.name)
-        setCode(roomCode)
       }
     })
 
+
     return () => { }
   }, [roomCode])
-
 
   const createRoom = async (params: NewRoomParams) => {
     const roomRef = database.ref('rooms');
@@ -56,7 +56,11 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
 			name: params.name
 		});
 
-    return firebaseRoom
+    await database.ref(`rooms/${firebaseRoom.key}/members`).push({
+      nickname: params.authorNick
+    });
+
+    return firebaseRoom.key
   }
 
   const createTask = (title: string) => {
@@ -76,7 +80,7 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
   return (
     <RoomContext.Provider value={{
       name,
-      code,
+      roomCode,
       createRoom,
       createTask,
       deleteTask

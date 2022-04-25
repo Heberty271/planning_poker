@@ -8,13 +8,17 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/rooms' element={
+        <Route path='/rooms/:id' element={
           <RoomContextProvider>
             <Room />
           </RoomContextProvider>
         } />
 
-        <Route path='/rooms/new' element={<CreateRoom />} />
+        <Route path='/rooms/new' element={
+          <RoomContextProvider>
+            <CreateRoom />
+          </RoomContextProvider>
+        } />
         <Route path='/template' element={<Template />} />
       </Routes>
     </BrowserRouter>
