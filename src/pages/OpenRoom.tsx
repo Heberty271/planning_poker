@@ -37,7 +37,7 @@ export function OpenRoom() {
                             </div>
                             <label htmlFor="key">Insira um nome de sala existente</label>
                             <br />
-                            <input onChange={(e) => {setKey(e.target.value); }} type="text" id="key" value={key} placeholder="Digite a chave da sala" />
+                            <input onChange={(e) => {setKey(e.target.value); }} type="text" id="key" value={key} placeholder="Digite a chave da sala" required/>
                             <br />
                             <div className="buttons-form">
                                 <button type="submit" className="btn-primary">Abrir Sala</button>
