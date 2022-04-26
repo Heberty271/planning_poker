@@ -57,7 +57,7 @@ export function CreateRoom() {
                             <div className="buttons-form">
                                 <button type="submit" className="btn-primary">Criar Sala</button>
                                 <br/>
-                                <a href="">Acessar sala existente</a>
+                                <a href="/rooms/enter">Acessar sala existente</a>
                             </div>
                         </form>
                         

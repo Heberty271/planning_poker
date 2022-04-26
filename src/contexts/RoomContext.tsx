@@ -34,8 +34,8 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
   const [name, setName] = useState('')
   // const [roomCode, setRoomCode] = useState('')
 
-  useEffect(() => {    
-    
+  useEffect(() => {
+
     const roomRef = database.ref(`rooms/${roomCode}`)
     roomRef.on('value', room => {
       const dataRoom = room.val()
@@ -52,9 +52,9 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
   const createRoom = async (params: NewRoomParams) => {
     const roomRef = database.ref('rooms');
 
-		const firebaseRoom = await roomRef.push({
-			name: params.name
-		});
+    const firebaseRoom = await roomRef.push({
+      name: params.name
+    });
 
     await database.ref(`rooms/${firebaseRoom.key}/members`).push({
       nickname: params.authorNick

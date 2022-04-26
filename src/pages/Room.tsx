@@ -15,7 +15,7 @@ type RoomParams = {
 export default function Room() {
   const { name, roomCode } = useRoom()
   
-  if (!roomCode) {
+  if (!roomCode||!name) {
     return (
       <>
         <h1>Sala não encontrada</h1>
