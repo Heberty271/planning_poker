@@ -48,6 +48,15 @@ input{
   border-style:groove;
   color: #444;
 }
+
+input:invalid{
+  color:red;
+}
+
+input:valid{
+  color:green;
+}
+
 label{
   margin: 0 1rem;
   font-size: 1rem;

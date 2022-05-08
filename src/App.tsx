@@ -3,6 +3,7 @@ import { RoomContextProvider } from "./contexts/RoomContext";
 import Room from "./pages/Room";
 import { Template } from "./pages/Template";
 import { CreateRoom } from "./pages/CreateRoom";
+import { OpenRoom } from "./pages/OpenRoom";
 
 function App() {
   return (
@@ -17,6 +18,11 @@ function App() {
         <Route path='/rooms/new' element={
           <RoomContextProvider>
             <CreateRoom />
+          </RoomContextProvider>
+        } />
+        <Route path='/rooms/enter' element={
+          <RoomContextProvider>
+            <OpenRoom />
           </RoomContextProvider>
         } />
         <Route path='/template' element={<Template />} />

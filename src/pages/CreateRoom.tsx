@@ -48,16 +48,16 @@ export function CreateRoom() {
                             </div>
                             <label htmlFor="name">Insira um nome para a Sala</label>
                             <br />
-                            <input onChange={(e) => {setName(e.target.value); }} type="text" id="name" value={name} placeholder="Digite o nome da sala" />
+                            <input onChange={(e) => {setName(e.target.value); }} type="text" id="name" value={name} placeholder="Digite o nome da sala" minLength={3} required/>
                             <br />
                             <label htmlFor="nick">Insira um apelido</label>
                             <br />
-                            <input onChange={(e) => {setNick(e.target.value); }} type="text" id="nick" value={nick} placeholder="Digite seu apelido" />
+                            <input onChange={(e) => {setNick(e.target.value); }} type="text" id="nick" value={nick} placeholder="Digite seu apelido" minLength={3} required/>
                             <br />
                             <div className="buttons-form">
                                 <button type="submit" className="btn-primary">Criar Sala</button>
                                 <br/>
-                                <a href="">Acessar sala existente</a>
+                                <a href="/rooms/enter">Acessar sala existente</a>
                             </div>
                         </form>
                         
