@@ -37,10 +37,10 @@ export function CreateRoom() {
                 <div></div>
             </nav>
             <main className="flex-center" style={{ height: "70%" }}>
-                <div style={{ width: "60%", height: "100%" }} className="flex-center">
+                <div className="w-3/5 h-full flex-center">
                     <img src="https://miro.medium.com/max/1400/1*UzlFgnkt2jCe9LbF7-DBTg.gif" width="700px"></img>
                 </div>
-                <div id="form" style={{ width: "40%", height: "100%" }} className="flex-center">
+                <div id="form" className="w-2/5 h-full flex-center">
                     <div className="flex flex-col gap-6">
                         <div className="flex-col-center gap-2">
                             <h2>Criar Nova Sala</h2>
