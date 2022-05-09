@@ -1,113 +1,152 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-body, #root {
-  height: 100%;
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredoka&display=swap');
+
+html, body, #root{
+  @apply h-full;
+  color: #48545D;
 }
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: 'Poppins', sans-serif;
-  color: rgb(15 23 42);
-  position: absolute;
-  height: 100%;
-  width: 100%;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+#root {
+  @apply z-0 static
 }
+
+textarea:focus, input:focus, select:focus {
+  outline: 0;
+} 
 
 h1 {
-  font-size: 4rem;
-  font-weight: bold;
+  @apply text-3xl text-secondary-400 mb-6
+  xsm:text-4xl sm:text-5xl md:text-6xl
+  mobile:text-5xl mobile:text-center
 }
+
 h2 {
-  font-size: 2rem;
+  @apply text-xl text-secondary-400
+  xsm:text-2xl md:text-3xl
+  mobile:text-center
 }
+
 h3 {
-  font-size: 1rem;
-  font-weight: lighter;
+  @apply text-lg xsm:text-xl
 }
 
-.logo{
-  padding-left: 1rem;
+.info {
+  @apply text-gray-400 text-xl
 }
 
-input{
-  margin: 0.5rem 1rem;
-  padding: 10px 12px;
-  font-size: 1.5rem;
-  border-radius: 5px;
-  border-color: #ccc;
-  border-style:groove;
-  color: #444;
+input {
+  @apply m-1 py-3 px-6
+  border-3 rounded-md
+  text-xl
+  border-gray-200
+  hover:border-gray-300
+  focus:border-primary-300
+  duration-200 ease-in-out
+  mobile:text-lg
+  mobile:px-2
+  mobile:border-2
 }
 
-input:invalid{
-  color:red;
+textarea {
+  @apply m-1 py-3 px-6
+  bg-gray-200
+  border-3 rounded-md
+  text-xl
+  duration-200 ease-in-out
+  mobile:text-lg
+  mobile:px-2
 }
 
-input:valid{
-  color:green;
+/* My custom classes */
+.flex-center {
+  @apply flex justify-center items-center
 }
 
-label{
-  margin: 0 1rem;
-  font-size: 1rem;
+.flex-col-center {
+  @apply flex flex-col justify-center items-center
 }
 
-button{
-  margin: 1rem;
-  padding: 10px 12px;
-  font-size: 1.5rem;
-  font-weight: 900;
-  border-radius: 5px;
+.flex-between {
+  @apply flex justify-between items-center
 }
 
-button:hover{
-  cursor: pointer;
-  opacity: 80%;
+.btn-sm {
+  @apply
+  py-1 px-4
+  rounded-md
+  text-lg font-semibold
+  hover:opacity-70
+  duration-200 ease-in-out
 }
 
-.btn-primary{
-  background-color: rgb(14 165 233);
-  border: none;
-  color: white;
+.btn {
+  @apply
+  m-1 py-3 px-8
+  border-3 border-gray-200 rounded-md
+  text-xl font-semibold
+  hover:opacity-70
+  duration-200 ease-in-out
+  mobile:px-4
 }
 
-.flex-center{
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.btn-primary {
+  @apply bg-primary-300 text-white border-0
 }
 
-.flex-down{
-  display:inline-block;
-  justify-content: center;
-  align-items: center;
+.btn-secondary {
+  @apply bg-gray-200 text-gray-800 border-0
+  hover:bg-gray-300 hover:opacity-100
 }
 
-.title-form{
-  margin: 1rem;
-  text-align: center;
-
+.btn-dark {
+  @apply 
+  hover:bg-secondary-300 hover:text-white hover:opacity-100
 }
 
-.buttons-form{
-  text-align: center;
+.font-fredoka {
+  font-family: 'Fredoka', sans-serif;;
 }
 
-#form{
-  margin: 5rem;
-  padding-right: -2rem;
+.nav-item {
+  @apply link hover:bg-gray-200
 }
 
-a{
-  margin: 1rem;
+.link {
+  @apply hover:cursor-pointer hover:text-secondary-300
+  duration-200 ease-in-out
+}
+
+.link-span {
+  @apply link text-xl text-gray-500 font-semibold font-fredoka hover:opacity-60
+}
+
+.main {
+  @apply w-full xsm:w-2/3 px-8 xsm:px-0 flex-col-center
+}
+
+.separator {
+  @apply my-4 w-2/3 flex-center text-gray-400 font-fredoka
+}
+
+.separator::before {
+  @apply flex-1 mr-4 bg-gray-400;
+	content: '';
+	height: 1px;
+}
+
+.separator::after {
+  @apply flex-1 ml-4 bg-gray-400;
+	content: '';
+	height: 1px;
 }
