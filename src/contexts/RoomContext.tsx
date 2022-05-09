@@ -34,7 +34,6 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
 
   const [name, setName] = useState('')
   const [code, setCode] = useState('')
-  // const [roomCode, setRoomCode] = useState('')
 
   useEffect(() => {
 
@@ -44,6 +43,7 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
 
       if (dataRoom) {
         setName(dataRoom.name)
+        setCode(roomCode)
       }
     })
 

@@ -1,12 +1,12 @@
-// import { useModals } from '../../hooks/useModals'
+import { useModals } from '../../hooks/useModals'
 import fileIcom from './images/file-icon.svg'
 
 export function ButtonShowTasks() {
-  // const { setShowModal } = useModals()
+  const { setShowModal } = useModals()
   
   return (
     <div
-      // onClick={() => setShowModal('tasks')}
+      onClick={() => setShowModal('tasks')}
       className="
         h-14 p-2 flex-center
         border-2 border-primary-300 rounded-lg
