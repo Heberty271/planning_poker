@@ -2,7 +2,6 @@ import { useModals } from '../../hooks/useModals'
 import NewTask from '../NewTask'
 import closeIcon from './images/close-icon.svg'
 import { Modal } from '../BaseModal'
-import { TaskList } from '../TaskList'
 
 export function TaskSideBar() {
   const { setShowModal } = useModals()
