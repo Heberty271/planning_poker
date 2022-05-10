@@ -19,6 +19,7 @@ type NewRoomParams = {
 
 type RoomContextType = {
   name: string
+  code?: string
   roomCode: string
   createRoom(params: NewRoomParams): any
   createTask(title: string): void
@@ -32,7 +33,7 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
   const roomCode = params.id ?? ''
 
   const [name, setName] = useState('')
-  // const [roomCode, setRoomCode] = useState('')
+  const [code, setCode] = useState('')
 
   useEffect(() => {
 
@@ -42,6 +43,7 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
 
       if (dataRoom) {
         setName(dataRoom.name)
+        setCode(roomCode)
       }
     })
 
@@ -80,6 +82,7 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
   return (
     <RoomContext.Provider value={{
       name,
+      code,
       roomCode,
       createRoom,
       createTask,
