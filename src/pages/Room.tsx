@@ -1,33 +1,55 @@
-import { useEffect, useLayoutEffect, useState } from "react";
-import { useParams } from "react-router";
-import { useRoom } from "../hooks/useRoom";
-import { database } from '../services/firebase';
+import { TaskSideBar } from "../components/TaskSideBar"
+import { Page } from "../components/Page"
+import { Table } from "../components/Table"
+import { Deck } from "../components/Deck"
 
-type Room = {
-  name: string;
-  createdAt: string;
-}
+import { useRoom } from "../hooks/useRoom"
+// import { useModals } from "../hooks/useModals"
 
-type RoomParams = {
-  id: string
-}
+import cx from 'classnames';
 
-export default function Room() {
-  const { name, roomCode } = useRoom()
-  
-  if (!roomCode) {
-    return (
-      <>
-        <h1>Sala não encontrada</h1>
-      </>
-    )
-  }
-
+export function Room() {
+  // const { setShowModal } = useModals()
+  const { name } = useRoom()
+  const taskToVote = undefined
 
   return (
     <>
-      <h1>{name} - {roomCode} </h1>
 
+      {name ? (
+        <>
+        <TaskSideBar />
+        <Page>          
+          <div className="w-full h-full flex flex-col">
+            <div className="w-full h-full flex flex-col items-center justify-between">
+              <div className="w-full flex-center gap-8">
+                <h2>Usuários que participantes da sala</h2>
+              </div>
+              <Table>
+                <div className="w-full flex-center mb-5">
+                    <span className="text-center">Nenhuma tarefa sendo votada no momento</span>
+                </div>
+                <button
+                  type="submit"
+                  className={cx(
+                    { 'btn btn-primary': taskToVote },
+                    { 'btn btn-secondary border-3 text-gray-500 hover:cursor-no-drop': !taskToVote },
+                  )}
+                >Encerrar a rodada</button>
+              </Table>
+              <h2>Usuário que está logado nessa sessão</h2>
+              <Deck />
+            </div>
+          </div>
+        </Page>
+        </>
+      )
+        : (
+          <div className="w-full h-full px-10 flex-center">
+            <h2>404 - Sala não encontrada 🤔</h2>
+          </div>
+        )
+      }
     </>
   )
 }
