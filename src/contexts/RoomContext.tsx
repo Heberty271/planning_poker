@@ -17,10 +17,38 @@ type NewRoomParams = {
 
 }
 
+type Vote = {
+  value: number
+}
+
+type FirebaseTaskVotes = Record<string, Vote>
+
+type Task = {
+  id: string
+  title: string
+  votes: any
+  numberOfVotes: number | undefined
+  sumOfVotes: number | undefined
+  average: number | undefined
+}
+
+type FirebaseTask = {
+  id: string
+  title: string
+  votes: FirebaseTaskVotes | undefined
+  numberOfVotes: number | undefined
+  sumOfVotes: number | undefined
+  average: number | undefined
+}
+
+type FirebaseTasks = Record<string, FirebaseTask>
+
+
 type RoomContextType = {
   name: string
   code?: string
   roomCode: string
+  tasks: Task[]
   createRoom(params: NewRoomParams): any
   createTask(title: string): void
   deleteTask(taskId: string): void
@@ -34,6 +62,7 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
 
   const [name, setName] = useState('')
   const [code, setCode] = useState('')
+  const [tasks, setTasks] = useState<Task[]>([])
 
   useEffect(() => {
 
@@ -44,6 +73,13 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
       if (dataRoom) {
         setName(dataRoom.name)
         setCode(roomCode)
+
+        const firebaseTasks: FirebaseTasks = dataRoom.tasks ?? {}
+        const parsedTasks = Object.entries(firebaseTasks).map((task) => {
+          return handleFirebaseTask(task)
+        })
+
+        setTasks(parsedTasks)
       }
     })
 
@@ -65,6 +101,19 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
     return firebaseRoom.key
   }
 
+  function handleFirebaseTask(task: [string, FirebaseTask]): Task {
+    const [key, value] = task
+
+    return {
+      id: key,
+      title: value.title,
+      votes: value.votes,
+      numberOfVotes: value.numberOfVotes,
+      sumOfVotes: value.sumOfVotes,
+      average: value.average,
+    }
+  }
+
   const createTask = (title: string) => {
     database.ref(`rooms/${roomCode}/tasks`).push({
       title: title,
@@ -84,6 +133,7 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
       name,
       code,
       roomCode,
+      tasks,
       createRoom,
       createTask,
       deleteTask
