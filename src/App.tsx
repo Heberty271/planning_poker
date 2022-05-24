@@ -4,6 +4,7 @@ import { Room } from "./pages/Room";
 import { Template } from "./pages/Template";
 import { CreateRoom } from "./pages/CreateRoom";
 import { OpenRoom } from "./pages/OpenRoom";
+import { Home } from "./pages/Home";
 import { ModalContextProvider } from "./contexts/ModalsContext";
 
 function App() {
@@ -11,6 +12,12 @@ function App() {
     <BrowserRouter>
       <ModalContextProvider>
         <Routes>
+        <Route path='' element={
+            <RoomContextProvider>
+              <Home />
+            </RoomContextProvider>
+          } />
+          
           <Route path='/rooms/:id' element={
             <RoomContextProvider>
               <Room />
