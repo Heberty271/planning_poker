@@ -7,6 +7,7 @@ import { useRoom } from "../hooks/useRoom"
 // import { useModals } from "../hooks/useModals"
 
 import cx from 'classnames';
+import { VotingResult } from "../components/VotingResult"
 
 export function Room() {
   // const { setShowModal } = useModals()
@@ -19,6 +20,7 @@ export function Room() {
       {name ? (
         <>
         <TaskSideBar />
+        <VotingResult />
         <Page>          
           <div className="w-full h-full flex flex-col">
             <div className="w-full h-full flex flex-col items-center justify-between">

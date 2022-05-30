@@ -2,6 +2,13 @@ import { createContext, ReactNode, useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { database } from '../services/firebase'
 
+type UserRoom = {
+  id: string
+  name: string
+  avatar: string
+  voted?: boolean
+  showResult?: boolean
+}
 
 type RoomContextProviderProps = {
   children: ReactNode
@@ -49,9 +56,12 @@ type RoomContextType = {
   code?: string
   roomCode: string
   tasks: Task[]
+  taskToVote: Task | undefined
+  lastVotedTask: Task | undefined
   createRoom(params: NewRoomParams): any
   createTask(title: string): void
   deleteTask(taskId: string): void
+  handleCloseResultForUser(): void
 }
 
 export const RoomContext = createContext({} as RoomContextType)
@@ -62,7 +72,10 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
 
   const [name, setName] = useState('')
   const [code, setCode] = useState('')
+  const [currentUserRoom, setCurrentUserRoom] = useState<UserRoom>()
   const [tasks, setTasks] = useState<Task[]>([])
+  const [taskToVote, setTaskToVote] = useState<Task | undefined>()
+  const [lastVotedTask, setLastVotedTask] = useState<Task | undefined>()
 
   useEffect(() => {
 
@@ -126,6 +139,10 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
 
   const deleteTask = (taskId: string) => {
     database.ref(`rooms/${roomCode}/tasks/${taskId}`).remove()
+  } 
+
+  const handleCloseResultForUser = () => {
+    database.ref(`rooms/${roomCode}/users/${currentUserRoom?.id}`).child('showResult').set(false)
   }
 
   return (
@@ -134,9 +151,12 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
       code,
       roomCode,
       tasks,
+      taskToVote,
+      lastVotedTask,
       createRoom,
       createTask,
-      deleteTask
+      deleteTask,      
+      handleCloseResultForUser,
     }
     }>
       {children}
