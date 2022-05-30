@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/planning_poker/static/css/main.91e62b03.css",
+    "main.js": "/planning_poker/static/js/main.6479d316.js",
+    "static/media/poker.svg": "/planning_poker/static/media/poker.52e047b4948932ef51dc6d94b1d15873.svg",
+    "static/media/file-icon.svg": "/planning_poker/static/media/file-icon.e6902dc1b2341fb4f8fe99820c76768b.svg",
+    "static/media/copy.svg": "/planning_poker/static/media/copy.f36e82546f933b2e29766bd523eac116.svg",
+    "static/media/bin-icon.svg": "/planning_poker/static/media/bin-icon.7b657902af77848c47e9377a34a1cad8.svg",
+    "static/media/close-icon.svg": "/planning_poker/static/media/close-icon.c2f92b78ff64d9e2b0a1cd09da7e89b6.svg",
+    "index.html": "/planning_poker/index.html",
+    "main.91e62b03.css.map": "/planning_poker/static/css/main.91e62b03.css.map",
+    "main.6479d316.js.map": "/planning_poker/static/js/main.6479d316.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.91e62b03.css",
+    "static/js/main.6479d316.js"
+  ]
+}
