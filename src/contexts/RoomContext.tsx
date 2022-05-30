@@ -4,8 +4,7 @@ import { database } from '../services/firebase'
 
 type UserRoom = {
   id: string
-  name: string
-  avatar: string
+  nickname: string
   voted?: boolean
   showResult?: boolean
 }
@@ -52,16 +51,19 @@ type FirebaseTasks = Record<string, FirebaseTask>
 
 
 type RoomContextType = {
+  loadRoom: boolean
   name: string
   code?: string
   roomCode: string
   tasks: Task[]
   taskToVote: Task | undefined
-  lastVotedTask: Task | undefined
+  lastVotedTask: Task | undefined,
+  currentUserRoom: UserRoom | undefined,
   createRoom(params: NewRoomParams): any
   createTask(title: string): void
   deleteTask(taskId: string): void
-  handleCloseResultForUser(): void
+  handleCloseResultForUser(): void,
+  setMemberRoom(nickname:string, roomCode:string): Promise<string|boolean>
 }
 
 export const RoomContext = createContext({} as RoomContextType)
@@ -70,6 +72,7 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
   const params = useParams<RoomParams>()
   const roomCode = params.id ?? ''
 
+  const [loadRoom, setLoadRoom] = useState(false)
   const [name, setName] = useState('')
   const [code, setCode] = useState('')
   const [currentUserRoom, setCurrentUserRoom] = useState<UserRoom>()
@@ -78,7 +81,7 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
   const [lastVotedTask, setLastVotedTask] = useState<Task | undefined>()
 
   useEffect(() => {
-
+    setLoadRoom(true)
     const roomRef = database.ref(`rooms/${roomCode}`)
     roomRef.on('value', room => {
       const dataRoom = room.val()
@@ -96,6 +99,21 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
       }
     })
 
+    let idCurrentUser = window.localStorage.getItem('user-planning')
+    database.ref(`rooms/${roomCode}/members/${idCurrentUser}`).once('value').then((user) => {
+      if (user.val()) {
+        let currentUser = {
+          id: idCurrentUser ?? '',
+          nickname: user.val().nickname
+        }
+        setCurrentUserRoom(currentUser);
+      } else {
+        setCurrentUserRoom(undefined);
+      }
+      setLoadRoom(false)
+    })
+    
+
 
     return () => { }
   }, [roomCode])
@@ -107,11 +125,12 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
       name: params.name
     });
 
-    await database.ref(`rooms/${firebaseRoom.key}/members`).push({
-      nickname: params.authorNick
-    });
+    if (firebaseRoom.key) {
+      await setMemberRoom(params.authorNick, firebaseRoom.key)
+      return firebaseRoom.key
+    }
 
-    return firebaseRoom.key
+    return false
   }
 
   function handleFirebaseTask(task: [string, FirebaseTask]): Task {
@@ -141,22 +160,40 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
     database.ref(`rooms/${roomCode}/tasks/${taskId}`).remove()
   } 
 
+  const setMemberRoom = async (nickname:string, roomCode:string): Promise<string|boolean> => {
+    let room = await database.ref(`rooms/${roomCode}`).once('value')
+    if (!room.exists()) return false
+
+    let membersRef = database.ref(`rooms/${roomCode}/members`)    
+    let memberRoom = membersRef.push({
+      nickname
+    })    
+    if (!memberRoom.key) return false
+    
+    window.localStorage.setItem('user-planning', memberRoom.key);
+
+    return memberRoom.key
+  }
+
   const handleCloseResultForUser = () => {
     database.ref(`rooms/${roomCode}/users/${currentUserRoom?.id}`).child('showResult').set(false)
   }
 
   return (
     <RoomContext.Provider value={{
+      loadRoom,
       name,
       code,
       roomCode,
       tasks,
       taskToVote,
       lastVotedTask,
+      currentUserRoom,
       createRoom,
       createTask,
       deleteTask,      
       handleCloseResultForUser,
+      setMemberRoom,
     }
     }>
       {children}

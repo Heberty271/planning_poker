@@ -3,7 +3,7 @@ import { RoomContextProvider } from "./contexts/RoomContext";
 import { Room } from "./pages/Room";
 import { Template } from "./pages/Template";
 import { CreateRoom } from "./pages/CreateRoom";
-import { OpenRoom } from "./pages/OpenRoom";
+import { SignIn } from "./pages/SignIn";
 import { Home } from "./pages/Home";
 import { ModalContextProvider } from "./contexts/ModalsContext";
 
@@ -31,7 +31,7 @@ function App() {
           } />
           <Route path='/rooms/enter' element={
             <RoomContextProvider>
-              <OpenRoom />
+              <SignIn />
             </RoomContextProvider>
           } />
           <Route path='/template' element={<Template />} />

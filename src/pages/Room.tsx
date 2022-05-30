@@ -2,22 +2,29 @@ import { TaskSideBar } from "../components/TaskSideBar"
 import { Page } from "../components/Page"
 import { Table } from "../components/Table"
 import { Deck } from "../components/Deck"
-
+import { VotingResult } from "../components/VotingResult"
+import { Spinner } from "../components/Spinner"
+import { UserRoom } from "../components/UserRoom"
 import { useRoom } from "../hooks/useRoom"
-// import { useModals } from "../hooks/useModals"
 
 import cx from 'classnames';
-import { VotingResult } from "../components/VotingResult"
 
 export function Room() {
   // const { setShowModal } = useModals()
-  const { name } = useRoom()
+  const { loadRoom, name, currentUserRoom } = useRoom()
   const taskToVote = undefined
+
+  console.log(currentUserRoom)
+  if (loadRoom) {
+    return (
+      <Spinner />
+    )
+  }
 
   return (
     <>
 
-      {name ? (
+      {name && currentUserRoom ? (
         <>
         <TaskSideBar />
         <VotingResult />
@@ -39,7 +46,7 @@ export function Room() {
                   )}
                 >Encerrar a rodada</button>
               </Table>
-              <h2>Usuário que está logado nessa sessão</h2>
+              <UserRoom key={currentUserRoom?.id} user={currentUserRoom} />
               <Deck />
             </div>
           </div>
