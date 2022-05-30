@@ -19,7 +19,9 @@
     "test:watch": "npm test -- --watch",
     "test:staged": "npm test -- --findRelatedTests",
     "test:ci": "npm test -- --coverage",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -b master -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -52,5 +54,6 @@
     "postcss": "^8.4.13",
     "tailwindcss": "^3.0.24",
     "ts-jest": "^27.1.4"
-  }
+  },
+  "homepage": "https://Heberty271.github.io/planning_poker"
 }
