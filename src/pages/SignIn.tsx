@@ -1,16 +1,22 @@
 import { Page } from "../components/Page";
 import { FormEvent, useState } from "react"
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useRoom } from "../hooks/useRoom";
 
 type OpenRoom = {
     name: string;
 }
 
+type RoomParams = {
+    sign_in_code?: string
+  }
+
 export function SignIn() {
+    const params = useParams<RoomParams>()
+    const roomCode = params.sign_in_code ?? ''
     const { setMemberRoom } = useRoom()
     const navigate = useNavigate();
-    const [key, setKey] = useState('');
+    const [key, setKey] = useState(roomCode);
     const [nick, setNick] = useState('');
 
 
