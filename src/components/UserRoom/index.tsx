@@ -24,7 +24,7 @@ export function UserRoom({ user }: any) {
         }
       </div>
       <div className="flex-center mt-2 gap-1 mobile:my-1">
-        <span className="font-semibold text-lg mobile:text-sm">{user.name.split(' ')[0]}</span>
+        <span className="font-semibold text-lg mobile:text-sm">{user.nickname}</span>
       </div>
     </div>
   )
