@@ -2,8 +2,8 @@ import { TaskSideBar } from "../components/TaskSideBar"
 import { Page } from "../components/Page"
 import { Table } from "../components/Table"
 import { Deck } from "../components/Deck"
-import { VotingResult } from "../components/VotingResult"
 import { Spinner } from "../components/Spinner"
+import { VotingResult } from "../components/VotingResult"
 import { UserRoom } from "../components/UserRoom"
 import { useRoom } from "../hooks/useRoom"
 
@@ -33,7 +33,7 @@ export function Room() {
       <div className="w-full h-full px-10 flex-col-center gap-4">
         <h2>403 - Não Autorizado 🤔</h2>
         <h3>Parece que essa sala existe mas você está tentando acessá-la de forma incorreta.</h3>
-        <span>Tente entrar <a href={'/rooms/sign-in'} className="link-span">clicando aqui</a>.</span>
+        <span>Tente entrar <a href={`/rooms/sign-in/${code}`} className="link-span">clicando aqui</a>.</span>
       </div>
     )
   }

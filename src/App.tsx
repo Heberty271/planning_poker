@@ -34,6 +34,11 @@ function App() {
               <SignIn />
             </RoomContextProvider>
           } />
+          <Route path='/rooms/sign-in/:sign_in_code' element={
+            <RoomContextProvider>
+              <SignIn />
+            </RoomContextProvider>
+          } />
           <Route path='/template' element={<Template />} />
         </Routes>
       </ModalContextProvider>
