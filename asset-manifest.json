@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/planning_poker/static/css/main.7699441e.css",
-    "main.js": "/planning_poker/static/js/main.2a241e32.js",
+    "main.js": "/planning_poker/static/js/main.fe546d82.js",
     "static/media/urokodaki.jpg": "/planning_poker/static/media/urokodaki.329d4e66f717c197c5cf.jpg",
     "static/media/poker.svg": "/planning_poker/static/media/poker.52e047b4948932ef51dc6d94b1d15873.svg",
     "static/media/file-icon.svg": "/planning_poker/static/media/file-icon.e6902dc1b2341fb4f8fe99820c76768b.svg",
@@ -10,10 +10,10 @@
     "static/media/close-icon.svg": "/planning_poker/static/media/close-icon.c2f92b78ff64d9e2b0a1cd09da7e89b6.svg",
     "index.html": "/planning_poker/index.html",
     "main.7699441e.css.map": "/planning_poker/static/css/main.7699441e.css.map",
-    "main.2a241e32.js.map": "/planning_poker/static/js/main.2a241e32.js.map"
+    "main.fe546d82.js.map": "/planning_poker/static/js/main.fe546d82.js.map"
   },
   "entrypoints": [
     "static/css/main.7699441e.css",
-    "static/js/main.2a241e32.js"
+    "static/js/main.fe546d82.js"
   ]
 }
