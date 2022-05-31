@@ -29,7 +29,7 @@ function App() {
               <CreateRoom />
             </RoomContextProvider>
           } />
-          <Route path='/rooms/enter' element={
+          <Route path='/rooms/sign-in' element={
             <RoomContextProvider>
               <SignIn />
             </RoomContextProvider>

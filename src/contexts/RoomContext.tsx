@@ -9,6 +9,8 @@ type UserRoom = {
   showResult?: boolean
 }
 
+type FirebaseUsersRoom = Record<string, UserRoom>
+
 type RoomContextProviderProps = {
   children: ReactNode
 }
@@ -57,8 +59,9 @@ type RoomContextType = {
   roomCode: string
   tasks: Task[]
   taskToVote: Task | undefined
-  lastVotedTask: Task | undefined,
-  currentUserRoom: UserRoom | undefined,
+  lastVotedTask: Task | undefined
+  usersRoom: UserRoom[]
+  currentUserRoom: UserRoom | undefined
   createRoom(params: NewRoomParams): any
   createTask(title: string): void
   deleteTask(taskId: string): void
@@ -76,12 +79,14 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
   const [name, setName] = useState('')
   const [code, setCode] = useState('')
   const [currentUserRoom, setCurrentUserRoom] = useState<UserRoom>()
+  const [usersRoom, setUsersRoom] = useState<UserRoom[]>([])
   const [tasks, setTasks] = useState<Task[]>([])
   const [taskToVote, setTaskToVote] = useState<Task | undefined>()
   const [lastVotedTask, setLastVotedTask] = useState<Task | undefined>()
 
   useEffect(() => {
     setLoadRoom(true)
+    const idCurrentUser = window.localStorage.getItem('user-planning')
     const roomRef = database.ref(`rooms/${roomCode}`)
     roomRef.on('value', room => {
       const dataRoom = room.val()
@@ -89,6 +94,24 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
       if (dataRoom) {
         setName(dataRoom.name)
         setCode(roomCode)
+        setUsersRoom([])
+
+        const firebaseUsersRoom: FirebaseUsersRoom = dataRoom.members
+        Object.entries(firebaseUsersRoom).map(([key, value]) => {
+          value.id = key
+          
+          if (value.id == idCurrentUser) {
+            setCurrentUserRoom(value)
+          }
+
+          setUsersRoom((usersRoom: UserRoom[]) => {
+            return [
+              value,
+              ...usersRoom,
+            ]
+          })
+
+        })
 
         const firebaseTasks: FirebaseTasks = dataRoom.tasks ?? {}
         const parsedTasks = Object.entries(firebaseTasks).map((task) => {
@@ -97,21 +120,22 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
 
         setTasks(parsedTasks)
       }
-    })
-
-    let idCurrentUser = window.localStorage.getItem('user-planning')
-    database.ref(`rooms/${roomCode}/members/${idCurrentUser}`).once('value').then((user) => {
-      if (user.val()) {
-        let currentUser = {
-          id: idCurrentUser ?? '',
-          nickname: user.val().nickname
-        }
-        setCurrentUserRoom(currentUser);
-      } else {
-        setCurrentUserRoom(undefined);
-      }
       setLoadRoom(false)
     })
+
+ 
+    // database.ref(`rooms/${roomCode}/members/${idCurrentUser}`).once('value').then((user) => {
+    //   if (user.val()) {
+    //     let currentUser = {
+    //       id: idCurrentUser ?? '',
+    //       nickname: user.val().nickname
+    //     }
+    //     setCurrentUserRoom(currentUser);
+    //   } else {
+    //     setCurrentUserRoom(undefined);
+    //   }
+    //   setLoadRoom(false)
+    // })
     
 
 
@@ -189,6 +213,7 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
       taskToVote,
       lastVotedTask,
       currentUserRoom,
+      usersRoom,
       createRoom,
       createTask,
       deleteTask,      
