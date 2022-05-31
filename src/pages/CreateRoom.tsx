@@ -49,7 +49,7 @@ export function CreateRoom() {
 
                         <div className="separator">ou</div>
 
-                        <a href="/rooms/enter" className="link-span">Acessar sala existente</a>
+                        <a href="/rooms/sign-in" className="link-span">Acessar sala existente</a>
                     </form>
                 </div>
             </div>
