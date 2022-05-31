@@ -18,7 +18,6 @@ export function TopBar() {
           { code && <RoomCode code={code} />}
           { code && <ButtonShowTasks /> }
         </div>
-        <button onClick={() => {setShowModal('voting-result')}}>Modal Resultados</button>
       </div>
     </div>
   )
