@@ -4,10 +4,10 @@ import { Modal } from "../BaseModal";
 
 export function VotingResult() {
   const { setShowModal } = useModals()
-  const { lastVotedTask, handleCloseResultForUser } = useRoom()
+  const { lastVotedTask, handleCloseResultForMember } = useRoom()
 
   const handleCloseResult = () => {
-    handleCloseResultForUser()
+    handleCloseResultForMember()
     setShowModal(false)
   }
 

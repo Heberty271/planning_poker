@@ -11,7 +11,7 @@ import cx from 'classnames';
 
 export function Room() {
   // const { setShowModal } = useModals()
-  const { code, loadRoom, usersRoom, currentUserRoom, taskToVote, handleCloseVote } = useRoom()
+  const { code, loadRoom, membersRoom, currentMemberRoom, taskToVote, handleCloseVote } = useRoom()
 
   if (loadRoom) {
     return (
@@ -23,7 +23,7 @@ export function Room() {
         <h2>404 - Sala não encontrada 🤔</h2>
       </div>
     )
-  } else if (code && !currentUserRoom) {
+  } else if (code && !currentMemberRoom) {
     return (
       <div className="w-full h-full px-10 flex-col-center gap-4">
         <h2>403 - Não Autorizado 🤔</h2>
@@ -41,8 +41,8 @@ export function Room() {
         <div className="w-full h-full flex flex-col">
           <div className="w-full h-full flex flex-col items-center justify-between">
             <div className="w-full flex-center gap-8">
-              {usersRoom.map((userRoom) => {
-                if (userRoom.id == currentUserRoom?.id) return
+              {membersRoom.map((userRoom) => {
+                if (userRoom.id == currentMemberRoom?.id) return
 
                 return (
                   <UserRoom key={userRoom.id} user={userRoom} />
@@ -65,7 +65,7 @@ export function Room() {
                   )}
                 >Encerrar a rodada</button>
               </Table>
-            <UserRoom key={currentUserRoom?.id} user={currentUserRoom} />
+            <UserRoom key={currentMemberRoom?.id} user={currentMemberRoom} />
             <Deck />
           </div>
         </div>

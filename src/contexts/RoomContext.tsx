@@ -9,7 +9,7 @@ type UserRoom = {
   showResult?: boolean
 }
 
-type FirebaseUsersRoom = Record<string, UserRoom>
+type FirebaseMembersRoom = Record<string, UserRoom>
 
 type RoomContextProviderProps = {
   children: ReactNode
@@ -60,16 +60,16 @@ type RoomContextType = {
   tasks: Task[]
   taskToVote?: Task
   lastVotedTask?: Task
-  usersRoom: UserRoom[]
-  currentUserRoom?: UserRoom
+  membersRoom: UserRoom[]
+  currentMemberRoom?: UserRoom
   createRoom: (params: NewRoomParams) => any
   createTask: (title: string) => void
   deleteTask: (taskId: string) => void
   handleTaskToVote: (task?: Task) => void
   handleVotingIntention: (value: number) => void
   handleCloseVote(): void
-  handleCloseResultForUser(): void
-  setMemberRoom(nickname:string, roomCode:string): Promise<string|boolean>
+  handleCloseResultForMember(): void
+  setMemberRoom(nickname: string, roomCode: string): Promise<string | boolean>
 }
 
 export const RoomContext = createContext({} as RoomContextType)
@@ -81,68 +81,55 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
   const [loadRoom, setLoadRoom] = useState(false)
   const [name, setName] = useState('')
   const [code, setCode] = useState('')
-  const [currentUserRoom, setCurrentUserRoom] = useState<UserRoom>()
-  const [usersRoom, setUsersRoom] = useState<UserRoom[]>([])
+  const [currentMemberRoom, setCurrentMemberRoom] = useState<UserRoom>()
+  const [membersRoom, setMembersRoom] = useState<UserRoom[]>([])
   const [tasks, setTasks] = useState<Task[]>([])
   const [taskToVote, setTaskToVote] = useState<Task | undefined>()
   const [lastVotedTask, setLastVotedTask] = useState<Task | undefined>()
 
   useEffect(() => {
-    setLoadRoom(true)
-    const idCurrentUser = window.localStorage.getItem('user-planning')
-    const roomRef = database.ref(`rooms/${roomCode}`)
-    roomRef.on('value', room => {
-      const dataRoom = room.val()
+    if (roomCode) {
 
-      if (dataRoom) {
-        setName(dataRoom.name)
-        setCode(roomCode)
-        setUsersRoom([])
-        setTaskToVote(handleFirebaseTaskVote(dataRoom.taskToVote))
-        setLastVotedTask(handleFirebaseTaskVote(dataRoom.lastVotedTask))
+      setLoadRoom(true)
+      const idCurrentMember = window.localStorage.getItem('member-planning')
+      const roomRef = database.ref(`rooms/${roomCode}`)
+      roomRef.on('value', room => {
+        const dataRoom = room.val()
 
-        const firebaseUsersRoom: FirebaseUsersRoom = dataRoom.members
-        Object.entries(firebaseUsersRoom).map(([key, value]) => {
-          value.id = key
-          
-          if (value.id == idCurrentUser) {
-            setCurrentUserRoom(value)
-          }
+        if (dataRoom) {
+          setName(dataRoom.name)
+          setCode(roomCode)
+          setMembersRoom([])
+          setTaskToVote(handleFirebaseTaskVote(dataRoom.taskToVote))
+          setLastVotedTask(handleFirebaseTaskVote(dataRoom.lastVotedTask))
 
-          setUsersRoom((usersRoom: UserRoom[]) => {
-            return [
-              value,
-              ...usersRoom,
-            ]
+          const firebaseMembersRoom: FirebaseMembersRoom = dataRoom.members
+          Object.entries(firebaseMembersRoom).map(([key, value]) => {
+            value.id = key
+
+            if (value.id == idCurrentMember) {
+              setCurrentMemberRoom(value)
+            }
+
+            setMembersRoom((membersRoom: UserRoom[]) => {
+              return [
+                value,
+                ...membersRoom,
+              ]
+            })
+
           })
 
-        })
+          const firebaseTasks: FirebaseTasks = dataRoom.tasks ?? {}
+          const parsedTasks = Object.entries(firebaseTasks).map((task) => {
+            return handleFirebaseTask(task)
+          })
 
-        const firebaseTasks: FirebaseTasks = dataRoom.tasks ?? {}
-        const parsedTasks = Object.entries(firebaseTasks).map((task) => {
-          return handleFirebaseTask(task)
-        })
-
-        setTasks(parsedTasks)
-      }
-      setLoadRoom(false)
-    })
-
- 
-    // database.ref(`rooms/${roomCode}/members/${idCurrentUser}`).once('value').then((user) => {
-    //   if (user.val()) {
-    //     let currentUser = {
-    //       id: idCurrentUser ?? '',
-    //       nickname: user.val().nickname
-    //     }
-    //     setCurrentUserRoom(currentUser);
-    //   } else {
-    //     setCurrentUserRoom(undefined);
-    //   }
-    //   setLoadRoom(false)
-    // })
-    
-
+          setTasks(parsedTasks)
+        }
+        setLoadRoom(false)
+      })
+    }
 
     return () => { }
   }, [roomCode])
@@ -231,24 +218,24 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
   }
 
   const handleMyVoterStatus = (status: boolean) => {
-    if (!currentUserRoom) return
+    if (!currentMemberRoom) return
 
-    const userRoomRef = database.ref(`rooms/${roomCode}/users/${currentUserRoom.id}`)
+    const userRoomRef = database.ref(`rooms/${roomCode}/members/${currentMemberRoom.id}`)
     userRoomRef.child('voted').set(status)
   }
 
   const handleVotingIntention = (value: number) => {
-    if (!currentUserRoom || !taskToVote) return
+    if (!currentMemberRoom || !taskToVote) return
 
     const taskVotesRef = database.ref(`rooms/${roomCode}/taskToVote/votes`)
 
     if (value) {
-      taskVotesRef.child(currentUserRoom.id).set({
+      taskVotesRef.child(currentMemberRoom.id).set({
         value: value,
       })
       handleMyVoterStatus(true)
     } else {
-      database.ref(`rooms/${roomCode}/taskToVote/votes/${currentUserRoom.id}`).remove()
+      database.ref(`rooms/${roomCode}/taskToVote/votes/${currentMemberRoom.id}`).remove()
       handleMyVoterStatus(false)
     }
   }
@@ -260,28 +247,29 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
     database.ref(`rooms/${roomCode}`).child('lastVotedTask').set(taskToVote)
     database.ref(`rooms/${roomCode}/taskToVote`).remove()
 
-    usersRoom.map(user => {
-      database.ref(`rooms/${roomCode}/users/${user.id}`).child('showResult').set(true)
+    membersRoom.map(user => {
+      database.ref(`rooms/${roomCode}/members/${user.id}`).child('showResult').set(true)
+      database.ref(`rooms/${roomCode}/members/${user.id}`).child('voted').set(false)
     })
   }
 
-  const setMemberRoom = async (nickname:string, roomCode:string): Promise<string|boolean> => {
+  const setMemberRoom = async (nickname: string, roomCode: string): Promise<string | boolean> => {
     let room = await database.ref(`rooms/${roomCode}`).once('value')
     if (!room.exists()) return false
 
-    let membersRef = database.ref(`rooms/${roomCode}/members`)    
+    let membersRef = database.ref(`rooms/${roomCode}/members`)
     let memberRoom = membersRef.push({
       nickname
-    })    
+    })
     if (!memberRoom.key) return false
-    
-    window.localStorage.setItem('user-planning', memberRoom.key);
+
+    window.localStorage.setItem('member-planning', memberRoom.key);
 
     return memberRoom.key
   }
 
-  const handleCloseResultForUser = () => {
-    database.ref(`rooms/${roomCode}/users/${currentUserRoom?.id}`).child('showResult').set(false)
+  const handleCloseResultForMember = () => {
+    database.ref(`rooms/${roomCode}/members/${currentMemberRoom?.id}`).child('showResult').set(false)
   }
 
   return (
@@ -293,15 +281,15 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
       tasks,
       taskToVote,
       lastVotedTask,
-      currentUserRoom,
-      usersRoom,
+      currentMemberRoom,
+      membersRoom,
       createRoom,
       createTask,
       deleteTask,
       handleTaskToVote,
       handleVotingIntention,
       handleCloseVote,
-      handleCloseResultForUser,
+      handleCloseResultForMember,
       setMemberRoom,
     }
     }>
