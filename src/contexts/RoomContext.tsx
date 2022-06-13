@@ -58,14 +58,17 @@ type RoomContextType = {
   code?: string
   roomCode: string
   tasks: Task[]
-  taskToVote: Task | undefined
-  lastVotedTask: Task | undefined
+  taskToVote?: Task
+  lastVotedTask?: Task
   usersRoom: UserRoom[]
-  currentUserRoom: UserRoom | undefined
-  createRoom(params: NewRoomParams): any
-  createTask(title: string): void
-  deleteTask(taskId: string): void
-  handleCloseResultForUser(): void,
+  currentUserRoom?: UserRoom
+  createRoom: (params: NewRoomParams) => any
+  createTask: (title: string) => void
+  deleteTask: (taskId: string) => void
+  handleTaskToVote: (task?: Task) => void
+  handleVotingIntention: (value: number) => void
+  handleCloseVote(): void
+  handleCloseResultForUser(): void
   setMemberRoom(nickname:string, roomCode:string): Promise<string|boolean>
 }
 
@@ -95,6 +98,8 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
         setName(dataRoom.name)
         setCode(roomCode)
         setUsersRoom([])
+        setTaskToVote(handleFirebaseTaskVote(dataRoom.taskToVote))
+        setLastVotedTask(handleFirebaseTaskVote(dataRoom.lastVotedTask))
 
         const firebaseUsersRoom: FirebaseUsersRoom = dataRoom.members
         Object.entries(firebaseUsersRoom).map(([key, value]) => {
@@ -157,6 +162,35 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
     return false
   }
 
+  function handleFirebaseTaskVote(task: FirebaseTask | undefined): Task | undefined {
+    if (!task) {
+      return undefined;
+    }
+
+    var sumOfVotes = 0
+    var numberOfVotes = 0
+    var average = 0
+
+    if (task.votes) {
+      const firebaseTaskVotes: FirebaseTaskVotes = task.votes ?? {}
+      const parsedVotes = Object.entries(firebaseTaskVotes).map(([key, value]) => {
+        sumOfVotes += value.value
+      })
+
+      numberOfVotes = parsedVotes.length
+      average = Math.round(sumOfVotes / numberOfVotes)
+    }
+
+    return {
+      id: task.id,
+      title: task.title,
+      votes: task.votes,
+      numberOfVotes: numberOfVotes,
+      sumOfVotes: sumOfVotes,
+      average: average,
+    }
+  }
+
   function handleFirebaseTask(task: [string, FirebaseTask]): Task {
     const [key, value] = task
 
@@ -182,7 +216,54 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
 
   const deleteTask = (taskId: string) => {
     database.ref(`rooms/${roomCode}/tasks/${taskId}`).remove()
-  } 
+  }
+
+  const handleTaskToVote = (task: Task | undefined) => {
+    if (!task) {
+      database.ref(`rooms/${roomCode}/taskToVote`).remove()
+      return
+    }
+
+    task.votes = 0
+
+    database.ref(`rooms/${roomCode}`).child('taskToVote').set(task ?? {})
+
+  }
+
+  const handleMyVoterStatus = (status: boolean) => {
+    if (!currentUserRoom) return
+
+    const userRoomRef = database.ref(`rooms/${roomCode}/users/${currentUserRoom.id}`)
+    userRoomRef.child('voted').set(status)
+  }
+
+  const handleVotingIntention = (value: number) => {
+    if (!currentUserRoom || !taskToVote) return
+
+    const taskVotesRef = database.ref(`rooms/${roomCode}/taskToVote/votes`)
+
+    if (value) {
+      taskVotesRef.child(currentUserRoom.id).set({
+        value: value,
+      })
+      handleMyVoterStatus(true)
+    } else {
+      database.ref(`rooms/${roomCode}/taskToVote/votes/${currentUserRoom.id}`).remove()
+      handleMyVoterStatus(false)
+    }
+  }
+
+  const handleCloseVote = () => {
+    if (!taskToVote) return
+    const taskRef = database.ref(`rooms/${roomCode}/tasks/${taskToVote.id}`)
+    taskRef.set(taskToVote)
+    database.ref(`rooms/${roomCode}`).child('lastVotedTask').set(taskToVote)
+    database.ref(`rooms/${roomCode}/taskToVote`).remove()
+
+    usersRoom.map(user => {
+      database.ref(`rooms/${roomCode}/users/${user.id}`).child('showResult').set(true)
+    })
+  }
 
   const setMemberRoom = async (nickname:string, roomCode:string): Promise<string|boolean> => {
     let room = await database.ref(`rooms/${roomCode}`).once('value')
@@ -216,7 +297,10 @@ export function RoomContextProvider({ children }: RoomContextProviderProps) {
       usersRoom,
       createRoom,
       createTask,
-      deleteTask,      
+      deleteTask,
+      handleTaskToVote,
+      handleVotingIntention,
+      handleCloseVote,
       handleCloseResultForUser,
       setMemberRoom,
     }

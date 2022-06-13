@@ -8,15 +8,10 @@ import { UserRoom } from "../components/UserRoom"
 import { useRoom } from "../hooks/useRoom"
 
 import cx from 'classnames';
-import { useNavigate } from "react-router"
 
 export function Room() {
-  const navigate = useNavigate();
   // const { setShowModal } = useModals()
-  const { loadRoom, code, currentUserRoom, usersRoom } = useRoom()
-  const taskToVote = undefined
-
-  console.log(currentUserRoom)
+  const { code, loadRoom, usersRoom, currentUserRoom, taskToVote, handleCloseVote } = useRoom()
 
   if (loadRoom) {
     return (
@@ -55,17 +50,21 @@ export function Room() {
               })}
             </div>
             <Table>
-              <div className="w-full flex-center mb-5">
-                <span className="text-center">Nenhuma tarefa sendo votada no momento</span>
-              </div>
-              <button
-                type="submit"
-                className={cx(
-                  { 'btn btn-primary': taskToVote },
-                  { 'btn btn-secondary border-3 text-gray-500 hover:cursor-no-drop': !taskToVote },
-                )}
-              >Encerrar a rodada</button>
-            </Table>
+                <div className="w-full flex-center mb-5">
+                  {taskToVote
+                    ? (<div className="flex-col-center gap-2">Votando<h2>{taskToVote.title}</h2></div>)
+                    : <span className="text-center">Nenhuma tarefa sendo votada no momento</span>
+                  }
+                </div>
+                <button
+                  onClick={handleCloseVote}
+                  type="submit"
+                  className={cx(
+                    { 'btn btn-primary': taskToVote },
+                    { 'btn btn-secondary border-3 text-gray-500 hover:cursor-no-drop': !taskToVote },
+                  )}
+                >Encerrar a rodada</button>
+              </Table>
             <UserRoom key={currentUserRoom?.id} user={currentUserRoom} />
             <Deck />
           </div>
