@@ -63,7 +63,7 @@ export function SignIn() {
                         />
                         <button type="submit" className="w-full btn btn-primary">Entrar</button>
                         <div className="separator">ou</div>
-                        <a href={'/rooms/new'} className="link-span">Criar nova sala</a>
+                        <span onClick={() => navigate('/rooms/new')} className="link-span">Criar nova sala</span>
                     </form>
                 </div>
             </div>
