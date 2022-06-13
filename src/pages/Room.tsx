@@ -8,10 +8,18 @@ import { UserRoom } from "../components/UserRoom"
 import { useRoom } from "../hooks/useRoom"
 
 import cx from 'classnames';
+import { useEffect } from "react"
+import { useModals } from "../hooks/useModals"
 
 export function Room() {
-  // const { setShowModal } = useModals()
+  const { setShowModal } = useModals()
   const { code, loadRoom, membersRoom, currentMemberRoom, taskToVote, handleCloseVote } = useRoom()
+  useEffect(() => {
+    if (currentMemberRoom?.showResult) {
+      setShowModal('voting-result')
+    }
+    return () => {}
+  }, [currentMemberRoom])
 
   if (loadRoom) {
     return (
