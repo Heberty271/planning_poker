@@ -8,15 +8,18 @@ import { UserRoom } from "../components/UserRoom"
 import { useRoom } from "../hooks/useRoom"
 
 import cx from 'classnames';
-import { useNavigate } from "react-router"
+import { useEffect } from "react"
+import { useModals } from "../hooks/useModals"
 
 export function Room() {
-  const navigate = useNavigate();
-  // const { setShowModal } = useModals()
-  const { loadRoom, code, currentUserRoom, usersRoom } = useRoom()
-  const taskToVote = undefined
-
-  console.log(currentUserRoom)
+  const { setShowModal } = useModals()
+  const { code, loadRoom, membersRoom, currentMemberRoom, taskToVote, handleCloseVote } = useRoom()
+  useEffect(() => {
+    if (currentMemberRoom?.showResult) {
+      setShowModal('voting-result')
+    }
+    return () => {}
+  }, [currentMemberRoom])
 
   if (loadRoom) {
     return (
@@ -28,7 +31,7 @@ export function Room() {
         <h2>404 - Sala não encontrada 🤔</h2>
       </div>
     )
-  } else if (code && !currentUserRoom) {
+  } else if (code && !currentMemberRoom) {
     return (
       <div className="w-full h-full px-10 flex-col-center gap-4">
         <h2>403 - Não Autorizado 🤔</h2>
@@ -46,8 +49,8 @@ export function Room() {
         <div className="w-full h-full flex flex-col">
           <div className="w-full h-full flex flex-col items-center justify-between">
             <div className="w-full flex-center gap-8">
-              {usersRoom.map((userRoom) => {
-                if (userRoom.id == currentUserRoom?.id) return
+              {membersRoom.map((userRoom) => {
+                if (userRoom.id == currentMemberRoom?.id) return
 
                 return (
                   <UserRoom key={userRoom.id} user={userRoom} />
@@ -55,18 +58,22 @@ export function Room() {
               })}
             </div>
             <Table>
-              <div className="w-full flex-center mb-5">
-                <span className="text-center">Nenhuma tarefa sendo votada no momento</span>
-              </div>
-              <button
-                type="submit"
-                className={cx(
-                  { 'btn btn-primary': taskToVote },
-                  { 'btn btn-secondary border-3 text-gray-500 hover:cursor-no-drop': !taskToVote },
-                )}
-              >Encerrar a rodada</button>
-            </Table>
-            <UserRoom key={currentUserRoom?.id} user={currentUserRoom} />
+                <div className="w-full flex-center mb-5">
+                  {taskToVote
+                    ? (<div className="flex-col-center gap-2">Votando<h2>{taskToVote.title}</h2></div>)
+                    : <span className="text-center">Nenhuma tarefa sendo votada no momento</span>
+                  }
+                </div>
+                <button
+                  onClick={handleCloseVote}
+                  type="submit"
+                  className={cx(
+                    { 'btn btn-primary': taskToVote },
+                    { 'btn btn-secondary border-3 text-gray-500 hover:cursor-no-drop': !taskToVote },
+                  )}
+                >Encerrar a rodada</button>
+              </Table>
+            <UserRoom key={currentMemberRoom?.id} user={currentMemberRoom} />
             <Deck />
           </div>
         </div>

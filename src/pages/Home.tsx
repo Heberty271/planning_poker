@@ -17,7 +17,7 @@ export function Home() {
                         <p>Divirta-se enquanto enquanto planeja suas atividade com essa incrível ferramenta.</p>
                     </div>
                     <div className="h-5/12 flex-col-center">
-                        <button className="w-full btn btn-primary" ><a href={'/rooms/new'}>Inicie um novo jogo</a></button>
+                        <button className="w-full btn btn-primary" onClick={()=>{navigate('/rooms/new')}}>Inicie um novo jogo</button>
                     </div>
                 </div>
                 <div className="pr-12 w-1/2 h-full flex-center ">
