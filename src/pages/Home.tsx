@@ -3,10 +3,7 @@ import { useNavigate } from "react-router";
 import { Page } from "../components/Page";
 
 export function Home() {
-    const navigate = useNavigate();
-
-    navigate('/')
-
+    const navigate = useNavigate()
 
     return (
         <div className="h-full flex flex-col">
@@ -17,7 +14,7 @@ export function Home() {
                         <p>Divirta-se enquanto enquanto planeja suas atividade com essa incrível ferramenta.</p>
                     </div>
                     <div className="h-5/12 flex-col-center">
-                        <button className="w-full btn btn-primary" onClick={()=>{navigate('/rooms/new')}}>Inicie um novo jogo</button>
+                        <button className="w-full btn btn-primary" onClick={() => { navigate('/rooms/new') }}>Inicie um novo jogo</button>
                     </div>
                 </div>
                 <div className="pr-12 w-1/2 h-full flex-center ">
@@ -32,7 +29,7 @@ export function Home() {
                 <div className="flex flex-row">
                     <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="23px" height="20px" />
                     <a href="https://github.com/Heberty271">Heberty Silva</a>
-               
+
                     <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="23px" height="20px" />
                     <a href="https://github.com/eliezer-alves">Eliezer Alves</a>
                 </div>
